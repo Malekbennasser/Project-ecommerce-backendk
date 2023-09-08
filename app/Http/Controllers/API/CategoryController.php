@@ -38,14 +38,14 @@ public function edit( $id){
     if($category)
     {
         return response()->json([
-            
+            'status'=>200,
             'category'=>$category
         ],200);
     }else{
         return response()->json([
-           
+           'status'=>404,
             'message'=>'No Category Id Found'
-        ],404);
+        ],);
     }
 
 }
@@ -56,11 +56,11 @@ public function edit( $id){
     public function store (Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'meta_title'=>'required|max:191',
+            'meta_title'=>'required|string|max:191',
             // 'meta_keyword'=>'required|max:191',
             // 'meta_descrip'=>'required',
-            'slug'=>'required|max:191',
-            'name'=>'required|max:191',
+            'slug'=>'required|string|max:191',
+            'name'=>'required|string|max:191',
             // 'description'=>'required',
             // 'status'=>'required',
 
@@ -96,11 +96,11 @@ return response()->json([
 
         public function update (Request $request ,$id){
             $validator = Validator::make($request->all(),[
-                'meta_title'=>'required|max:191',
+                'meta_title'=>'required|string|max:191',
                 // 'meta_keyword'=>'required|max:191',
                 // 'meta_descrip'=>'required',
-                'slug'=>'required|max:191',
-                'name'=>'required|max:191',
+                'slug'=>'required|string|max:191',
+                'name'=>'required|string|max:191',
                 // 'description'=>'required',
                 // 'status'=>'required',
     
@@ -135,7 +135,7 @@ return response()->json([
                 }else{
                     return response()->json([
                         'status'=>404,
-                        'messages'=>'No Category Id Found',
+                        'error'=>'No Category Id Found',
                     ]);
                 }
    

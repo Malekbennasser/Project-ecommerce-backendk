@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();
             $table->string('meta_title')->nullable();
             $table->mediumText('meta_keyword')->nullable();
             $table->mediumText('meta_descrip')->nullable();
@@ -28,6 +28,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+   
     public function down(): void
     {
         Schema::dropIfExists('categories');

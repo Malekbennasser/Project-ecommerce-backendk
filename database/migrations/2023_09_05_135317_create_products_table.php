@@ -29,6 +29,10 @@ return new class extends Migration
             $table->tinyInteger('popular')->default('0')->nullable();
             $table->tinyInteger('status')->default('0');
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
