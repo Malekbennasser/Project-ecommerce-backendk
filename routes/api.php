@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\CheckoutController;
 use App\Http\Controllers\API\FrontendController;
+use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +27,25 @@ Route::post('login',[AuthController::class,'login']);
 Route::get('getcategory',[FrontendController::class,'category']);
 Route::get('fetchproducts/{slug}',[FrontendController::class,'product']);
 Route::get('viewproductdetail/{category_slug}/{product_slug}',[FrontendController::class,'viewproduct']);
+Route::post('add-to-cart',[CartController::class, 'addtocart']);
+Route::get('cart', [CartController::class, 'viewcart']);
+Route::put('cart-updatequantity/{cart_id}/{scope}',[CartController::class,'updatequantity']);
+Route::delete('delete-cartitem/{cart_id}',[CartController::class,'deleteCartitem']);
+
+
+Route::post("validate-order",[CheckoutController::class,'validateOrder']);
+Route::post('place-order',[CheckoutController::class, 'placeorder']);
+
+
+//orders
+
+Route::get("orders",[OrderController::class, 'index']);
+
+
+
+
+// Route::get('/filterproducts', [ProductController::class, 'filterProducts']);
+
 
 
 Route::middleware('auth:sanctum','isAPIAdmin')->group(function () {
@@ -51,11 +73,15 @@ Route::middleware('auth:sanctum','isAPIAdmin')->group(function () {
 
 Route::middleware('auth:sanctum' )->group(function () {
   
-    
-Route::post('logout',[AuthController::class,'logout']);
+     Route::post('logout',[AuthController::class,'logout']);
+
 
 });
-
+//  Route::middleware('auth:sanctum')->post('logout', function (Request $request) {
+//     $request->user()->currentAccessToken()->delete();
+  
+//     return response()->json(['message' => 'Successfully logged out']);
+// });
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

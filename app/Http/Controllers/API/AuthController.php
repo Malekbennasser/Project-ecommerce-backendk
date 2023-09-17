@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+
 
 class AuthController extends Controller
 {
@@ -31,7 +33,7 @@ class AuthController extends Controller
 
            $token = $user->createToken($user->email.'_token')->plainTextToken;
            return response()->json([
-            'status'=>200,
+            'status'=>201,
             'username'=>$user->name,
             'token'=>$token,
             'message'=>'Registered Successfully',
@@ -42,58 +44,57 @@ class AuthController extends Controller
     }
 
 
-    public function login(Request $request){
-        $validator =validator::make($request->all(),[
-            "email" => "required",
-            "password" =>"required",
-
+    public function login(Request $request)
+    {
+        // Validation des données d'entrée
+        $validator = Validator::make($request->all(), [
+            'email' => "required|email",
+            'password' => 'required|string|min:8',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
-                'validation_errors'=>$validator->messages(),
+                'status' => 422,
+                'message' => 'Validation failed',
+                'validation_errors' => $validator->messages(),
             ]);
-           
-        } else {
-            $user = User::where('email', $request->email)->first();
- 
-          if (! $user || ! Hash::check($request->password, $user->password)) {
-        return response()->json([
-            'status'=>401,
-           
-            'message'=>'Invalid Credentials',
-
-        ]);
-
-        
-    }else {
-
-        if ($user->role_as == 1) 
-        {
-            $role= 'admin';
-            $token =  $user->createToken($user->email.'_AdminToken', ['server:admin'])->plainTextToken;
-        } 
-        else
-         {
-            $role='';
-             $token = $user->createToken($user->email.'_token', [''])->plainTextToken;
         }
-        
-       
-        return response()->json([
-         'status'=>200,
-         'username'=>$user->name,
-         'token'=>$token,
-         'message'=>'Logged In Successfully',
-         'role' =>$role,
-
-     ]);
-
-    }
-           
+    
+        // Tentative de connexion sécurisée
+        try {
+            $user = User::where('email', $request->email)->firstOrFail();
+    
+            if (! Hash::check($request->password, $user->password)) {
+                throw new \Exception('Invalid credentials');
+            }
+    
+            if ($user->role_as == 1) {
+                $role = 'admin';
+                $token = $user->createToken($user->email.'_AdminToken', ['server:admin'])->plainTextToken;
+            } else {
+                $role = 'user';
+                $token = $user->createToken($user->email.'_Token', [])->plainTextToken;
+            }
+    
+            // Journalisation de la connexion réussie
+            Log::info('User logged in', ['user_id' => $user->id, 'email' => $user->email, 'role' => $role]);
+    
+            return response()->json([
+                'status' => 200,
+                'username' => $user->name,
+                'token' => $token,
+                'message' => 'Logged In Successfully',
+                'role' => $role,
+            ]);
+        } catch (\Exception $e) {
+            // Journalisation de l'échec de la connexion
+            Log::warning('Login failed', ['email' => $request->email]);
+    
+            return response()->json([
+                'status' => 401,
+                'message' => 'Invalid Credentials',
+            ]);
         }
-        
-
     }
 
     public function logout(){

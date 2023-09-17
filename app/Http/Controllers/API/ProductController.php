@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 
 use App\Models\Product;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -24,13 +25,41 @@ class ProductController extends Controller
 
 
 
+//  public function filterProducts(Request $request)
+//     {
+//         $category = $request->input('category');
+//         $brand = $request->input('brand');
+//         $price = $request->input('price');
+
+//         $query = Product::query();
+
+//         if ($category) {
+//             $query->where('category', $category);
+//         }
+
+//         if ($brand) {
+//             $query->where('brand', $brand);
+//         }
+
+//         if ($price) {
+//             $query->where('price', $price);
+//         }
+
+//         $filteredProducts = $query->get();
+
+//         return response()->json(['filteredProducts' => $filteredProducts], 200);
+//     }
+
+
+
+
 
     public function store(Request $request){
 
 
         $validator = Validator::make($request->all(),[
             'category_id'=> 'required|string|max:191',
-            'slug'=> 'requiredstring||max:191',
+            'slug'=> 'required|string||max:191',
             'name'=> 'required|string|max:191',
             'meta_title'=> 'required|string|max:191',
             'brand'=> 'required|string|max:20',
