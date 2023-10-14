@@ -18,6 +18,14 @@ class FrontendController extends Controller
         ]);
     }
 
+    public function getProduct (){
+        $products= Product::all();
+        return response()->json([
+            'status'=>200,
+            'products'=>$products,
+        ]);
+    }
+
 
     public function product ($slug){
         $category = Category::where('slug', $slug)->where('status', '0')->first();

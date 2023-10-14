@@ -15,6 +15,7 @@ class ProductController extends Controller
 {
     public function index()
 {
+   
     $products= Product::all();
     return response()->json([
         'status'=>200,
@@ -24,31 +25,6 @@ class ProductController extends Controller
 
 
 
-
-//  public function filterProducts(Request $request)
-//     {
-//         $category = $request->input('category');
-//         $brand = $request->input('brand');
-//         $price = $request->input('price');
-
-//         $query = Product::query();
-
-//         if ($category) {
-//             $query->where('category', $category);
-//         }
-
-//         if ($brand) {
-//             $query->where('brand', $brand);
-//         }
-
-//         if ($price) {
-//             $query->where('price', $price);
-//         }
-
-//         $filteredProducts = $query->get();
-
-//         return response()->json(['filteredProducts' => $filteredProducts], 200);
-//     }
 
 
 
@@ -79,8 +55,6 @@ class ProductController extends Controller
             ]);
         }else {
 
-
-        
                   $product = new Product;
                   $product->category_id = $request->input('category_id');
                   $product->slug = $request->input('slug');
@@ -96,8 +70,6 @@ class ProductController extends Controller
                   $product->original_price = $request->input('original_price');
                   $product->qty = $request->input('qty');
 
-                
-
                   if ($request->hasFile('image')) {
                     $file = $request->file('image');
                     $extension = $file->getClientOriginalExtension();
@@ -108,7 +80,6 @@ class ProductController extends Controller
                    
                   }
 
-
                   $product->featured = $request->input('featured') == true ? '1':'0';
                   $product->popular = $request->input('popular')  == true ? '1':'0';
                   $product->status = $request->input('status')  == true ? '1':'0';
@@ -116,7 +87,8 @@ class ProductController extends Controller
                   $product->save();
 
                   return response()->json([
-                    'status'=>200,
+                    'status'=>201,
+                    'product'=>$product,
                     'message' => ' Product Added Successfully',
                   ] );
          

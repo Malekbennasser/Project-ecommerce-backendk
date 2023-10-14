@@ -15,14 +15,14 @@ class CheckoutController extends Controller
         if(auth('sanctum')->check()){
 
             $validator = Validator::make($request->all(),[
-                'firstname'=>'required|max:191',
-               'lastname'=>'required|max:191',
-               'phone'=>'required|max:191',
-               'email'=>'required|max:191',
-               'address'=>'required|max:191',
-               'city'=>'required|max:191',
-               'state'=>'required|max:191',
-               'zipcode'=>'required|max:191',
+                'firstname'=>'required|string|max:100',
+                'lastname'=>'required|string|max:100',
+                'phone'=>'required|integer',
+                'email'=>'required|email|max:100',
+                'address'=>'required|string|max:255',
+                'city'=>'required|string|max:255',
+                'state'=>'required|string|max:255',
+                'zipcode'=>'required|integer',
             ]);
 
           if ( $validator->fails()){
@@ -34,6 +34,7 @@ class CheckoutController extends Controller
 
           }else
           {
+            
 
             $user_id= auth('sanctum')->user()->id;
 
@@ -53,6 +54,7 @@ class CheckoutController extends Controller
             $order->tracking_no ='thestore'.rand(1111,9999);
             $order->save();
 
+    
             $orderitems =[];
 
             $cart =Cart::where('user_id',$user_id)->get();
@@ -68,7 +70,7 @@ class CheckoutController extends Controller
                 ];
 
                 $item->product->update([
-                    'qty'=>$item->product_Qty - $item->product_Qty 
+                    'qty'=>$item->product->qty - $item->product_Qty 
 
                 ]);
 
@@ -115,14 +117,14 @@ class CheckoutController extends Controller
         if(auth('sanctum')->check()){
 
             $validator = Validator::make($request->all(),[
-                'firstname'=>'required|max:191',
-               'lastname'=>'required|max:191',
-               'phone'=>'required|max:191',
-               'email'=>'required|max:191',
-               'address'=>'required|max:191',
-               'city'=>'required|max:191',
-               'state'=>'required|max:191',
-               'zipcode'=>'required|max:191',
+                'firstname'=>'required|string|max:100',
+               'lastname'=>'required|string|max:100',
+               'phone'=>'required|integer',
+               'email'=>'required|email|max:100',
+               'address'=>'required|string|max:255',
+               'city'=>'required|string|max:255',
+               'state'=>'required|string|max:255',
+               'zipcode'=>'required',
             ]);
 
           if ( $validator->fails()){

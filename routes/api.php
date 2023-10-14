@@ -6,6 +6,7 @@ use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\CheckoutController;
 use App\Http\Controllers\API\FrontendController;
 use App\Http\Controllers\API\OrderController;
+use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register',[AuthController::class,'register']);
 Route::post('login',[AuthController::class,'login']);
-
+Route::get('getproduct',[FrontendController::class,'getProduct']);
 Route::get('getcategory',[FrontendController::class,'category']);
 Route::get('fetchproducts/{slug}',[FrontendController::class,'product']);
 Route::get('viewproductdetail/{category_slug}/{product_slug}',[FrontendController::class,'viewproduct']);
@@ -40,17 +41,18 @@ Route::post('place-order',[CheckoutController::class, 'placeorder']);
 //orders
 
 Route::get("orders",[OrderController::class, 'index']);
+Route::post("test",[PaymentController::class, 'index']);
 
 
 
 
-// Route::get('/filterproducts', [ProductController::class, 'filterProducts']);
+
 
 
 
 Route::middleware('auth:sanctum','isAPIAdmin')->group(function () {
     Route::get('/chekingAuthenticated',function(){
-        return response()->json(['message'=>'You are in dashbord','status'=>200],200);
+        return response()->json(['message'=>'You are in dashbord','status'=>200]);
     });
    Route::get('view-category',[CategoryController::class,'index']);
    Route::get('/edit-category/{id}',[CategoryController::class,'edit']);
