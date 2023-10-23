@@ -17,12 +17,12 @@ class CheckoutController extends Controller
             $validator = Validator::make($request->all(),[
                 'firstname'=>'required|string|max:100',
                 'lastname'=>'required|string|max:100',
-                'phone'=>'required|integer',
+                'phone'=>'required|numeric',
                 'email'=>'required|email|max:100',
                 'address'=>'required|string|max:255',
                 'city'=>'required|string|max:255',
                 'state'=>'required|string|max:255',
-                'zipcode'=>'required|integer',
+                'zipcode'=>'required|string',
             ]);
 
           if ( $validator->fails()){
@@ -119,7 +119,7 @@ class CheckoutController extends Controller
             $validator = Validator::make($request->all(),[
                 'firstname'=>'required|string|max:100',
                'lastname'=>'required|string|max:100',
-               'phone'=>'required|integer',
+               'phone'=>'required|numeric',
                'email'=>'required|email|max:100',
                'address'=>'required|string|max:255',
                'city'=>'required|string|max:255',

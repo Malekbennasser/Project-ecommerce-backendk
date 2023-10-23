@@ -9,7 +9,7 @@ use App\Models\Order;
 class OrderController extends Controller
 {
     public function index(){
-        $orders= Order::all();
+        $orders= Order::latest()->get();;
         return response()->json([
             'status'=>200,
             'orders'=>$orders

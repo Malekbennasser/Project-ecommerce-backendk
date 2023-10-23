@@ -13,7 +13,6 @@ class CartController extends Controller
         if(auth('sanctum')->check())
         {
             $user_id = auth('sanctum')->user()->id;
-
             $product_id= $request->product_id;
             $product_qty= $request->product_qty;
 
@@ -53,7 +52,6 @@ class CartController extends Controller
             }
 
         }else{
-
 
             return response()->json([
                 'status'=>401,
@@ -100,35 +98,31 @@ class CartController extends Controller
 
 
 
-           
-    
+            $product = $cartitem->product;
 
-
-
-            if($scope == 'inc'){
-                $cartitem->product_Qty+=1;
-            }elseif($scope == 'dec'){
-                $cartitem->product_Qty-=1;
-
+            if ($scope == 'inc' && $product->qty > $cartitem->product_Qty) {
+                $cartitem->product_Qty += 1;
+            } elseif ($scope == 'dec' && $cartitem->product_Qty > 0) {
+                $cartitem->product_Qty -= 1;
+            } else {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Invalid quantity update',
+                ]);
             }
+    
             $cartitem ->update();
             return response()->json([
                 'status'=>200,
                 'message'=> 'Quantity Upadted',
             ]);
 
-
-
         }else{
-
 
             return response()->json([
                 'status'=>401,
                 'message'=> 'Login to Continue',
             ]);
-
-
-
 
         }
 

@@ -14,8 +14,6 @@ class PaymentController extends Controller
 {
   public function index(Request $request){
 
-  
-
     $validator = Validator::make($request->all(), [
       
         'number' => 'required',
@@ -29,8 +27,6 @@ class PaymentController extends Controller
     if ($validator->fails()) {
         return response()->json(['errors' => $validator->errors()], 400);
     }
-  
-
     try {
         
         $stripe = new \Stripe\StripeClient(
@@ -52,12 +48,7 @@ class PaymentController extends Controller
             'email'=> $customerEmail
            
           ]);
-        $customerId = $customer->id;
-      
-
-  
-       
-       
+        $customerId = $customer->id;    
    
 $paymentIntent =$stripe->paymentIntents->create([
              
@@ -73,9 +64,6 @@ $paymentIntent =$stripe->paymentIntents->create([
             
           ]);
           $paymentId = $paymentIntent->id;
-
-        //   $stripe = new \Stripe\StripeClient((env('STRIPE_SECRET')));
-       
         /*  dd($test);  */
         $order->payment_id = $paymentId;
             $order->save();

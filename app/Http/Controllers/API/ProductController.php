@@ -22,25 +22,17 @@ class ProductController extends Controller
         'products'=>$products,
     ]);
 }
-
-
-
-
-
-
-
-
     public function store(Request $request){
 
 
         $validator = Validator::make($request->all(),[
-            'category_id'=> 'required|string|max:191',
-            'slug'=> 'required|string||max:191',
-            'name'=> 'required|string|max:191',
-            'meta_title'=> 'required|string|max:191',
+            'category_id'=> 'required|string|max:100',
+            'slug'=> 'required|string||max:100',
+            'name'=> 'required|string|max:100',
+            'meta_title'=> 'required|string|max:100',
             'brand'=> 'required|string|max:20',
-            'selling_price'=> 'required|string|max:20',
-            'original_price'=> 'required|string|max:20',
+            'selling_price'=> 'required|integer',
+            'original_price'=> 'required|integer',
             'qty'=> 'required|string|max:4',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048', 
 
@@ -117,25 +109,19 @@ class ProductController extends Controller
             ]);
         }
 }
-
 public function update (Request $request , $id)
 {
-
-
     $validator = Validator::make($request->all(),[
-        'category_id'=> 'required|string|max:191',
-        'slug'=> 'required|string|max:191',
-        'name'=> 'required|string|max:191',
-        'meta_title'=> 'required|string|max:191',
+        'category_id'=> 'required|string|max:100',
+        'slug'=> 'required|string|max:100',
+        'name'=> 'required|string|max:100',
+        'meta_title'=> 'required|string|max:100',
         'brand'=> 'required|string|max:20',
-        'selling_price'=> 'required|string|max:20',
-        'original_price'=> 'required|string|max:20',
+        'selling_price'=> 'required|integer',
+        'original_price'=> 'required|integer',
         'qty'=> 'required|string|max:4',
-        // 'image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
-         
-
+        // 'image' => 'required|image|mimes:jpeg,png,jpg|max:2048'    
     ]);
-
     if($validator->fails()) 
     {
         return response()->json([
@@ -144,13 +130,9 @@ public function update (Request $request , $id)
         ]);
     } else {
 
-
-    
               $product = Product::find($id);
 
               if ($product) {
-
-
               $product->category_id = $request->input('category_id');
               $product->slug = $request->input('slug');
               $product->name = $request->input('name');
@@ -165,8 +147,6 @@ public function update (Request $request , $id)
               $product->original_price = $request->input('original_price');
               $product->qty = $request->input('qty');
 
-            
-
               if ($request->hasFile('image')) {
 
                 $path=$product->image;
@@ -175,18 +155,12 @@ public function update (Request $request , $id)
                 {
                     Storage::delete($path); 
                 }
-
-
                 $file = $request->file('image');
                 $extension = $file->getClientOriginalExtension();
                 $filename = time().'.'.$extension;
-                
                 $file->move('uploads/product/',$filename);
-                $product->image='uploads/product/'.$filename;
-               
+                $product->image='uploads/product/'.$filename;     
               }
-
-
               $product->featured = $request->input('featured') ;
               $product->popular = $request->input('popular') ;
               $product->status = $request->input('status')  ;
@@ -197,18 +171,11 @@ public function update (Request $request , $id)
                 'status'=>200,
                 'message' => ' Product Added Successfully',
               ] );
-
-
-
             } else {
-
-
-                return response()->json([
+               return response()->json([
                     'status'=>404,
                     'message' => ' Product Not found',
                   ] );
-
-
             }
 
 

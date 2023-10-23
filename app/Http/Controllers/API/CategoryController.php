@@ -31,41 +31,15 @@ public function allcategory(){
 }
 
 
-public function edit( $id){
-
-    $category = Category::find($id);
-    
-    if($category)
-    {
-        return response()->json([
-            'status'=>200,
-            'category'=>$category
-        ],200);
-    }else{
-        return response()->json([
-           'status'=>404,
-            'message'=>'No Category Id Found'
-        ],);
-    }
-
-}
-
-
 
 
     public function store (Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'meta_title'=>'required|string|max:191',
-            // 'meta_keyword'=>'required|max:191',
-            // 'meta_descrip'=>'required',
-            'slug'=>'required|string|max:191',
-            'name'=>'required|string|max:191',
-            // 'description'=>'required',
-            // 'status'=>'required',
-
-
-
+            'meta_title'=>'required|string|max:100',
+            'slug'=>'required|string|max:100',
+            'name'=>'required|string|max:100',
+         
         ]);
         if($validator->fails()) 
         {
@@ -76,36 +50,49 @@ public function edit( $id){
         }else{
 
             $category= new Category;
-$category->meta_title= $request->input('meta_title');
-$category->meta_keyword= $request->input('meta_keyword');
-$category->meta_descrip= $request->input('meta_descrip');
-$category->slug= $request->input('slug');
-$category->name= $request->input('name');
-$category->description= $request->input('description');
-$category->status= $request->input('status') == true ? '1':'0';
+             $category->meta_title= $request->input('meta_title');
+            $category->meta_keyword= $request->input('meta_keyword');
+             $category->meta_descrip= $request->input('meta_descrip');
+            $category->slug= $request->input('slug');
+             $category->name= $request->input('name');
+             $category->description= $request->input('description');
+             $category->status= $request->input('status') == true ? '1':'0';
 
-$category->save();
-return response()->json([
-    'status'=>200,
-    'messages'=>'Category Added Successfully',
-]);
+             $category->save();
+             return response()->json([
+                'status'=>200,
+                 'messages'=>'Category Added Successfully',
+                          ]);
 
     }
             
         }
+           public function edit( $id){
+
+
+               $category = Category::find($id);
+    
+                   if($category)
+                      {
+                   return response()->json([
+                         'status'=>200,
+                         'category'=>$category
+                             ]);
+               }else
+               {
+               return response()->json([
+                    'status'=>404,
+                      'message'=>'No Category Id Found'
+              ]);
+              }
+
+         }
 
         public function update (Request $request ,$id){
             $validator = Validator::make($request->all(),[
-                'meta_title'=>'required|string|max:191',
-                // 'meta_keyword'=>'required|max:191',
-                // 'meta_descrip'=>'required',
-                'slug'=>'required|string|max:191',
-                'name'=>'required|string|max:191',
-                // 'description'=>'required',
-                // 'status'=>'required',
-    
-    
-    
+                'meta_title'=>'required|string|max:100',
+                'slug'=>'required|string|max:100',
+                'name'=>'required|string|max:100',
             ]);
             if($validator->fails()) 
             {
@@ -113,24 +100,24 @@ return response()->json([
                     'status'=>422,
                     'error'=>$validator->messages(),
                 ]);
-            }else{
+                      }else{
     
-                $category=  Category::find($id);
+                $category=Category::find($id);
                 if($category){ 
                     
-                    $category->meta_title= $request->input('meta_title');
-                     $category->meta_keyword= $request->input('meta_keyword');
-                     $category->meta_descrip= $request->input('meta_descrip');
-                  $category->slug= $request->input('slug');
+                $category->meta_title= $request->input('meta_title');
+                $category->meta_keyword= $request->input('meta_keyword');
+                $category->meta_descrip= $request->input('meta_descrip');
+                $category->slug= $request->input('slug');
                  $category->name= $request->input('name');
-                   $category->description= $request->input('description');
-                  $category->status= $request->input('status') == true ? '1':'0';
+                $category->description= $request->input('description');
+                $category->status= $request->input('status') == true ? '1':'0';
     
-    $category->save();
-    return response()->json([
-        'status'=>200,
-        'messages'=>'Category updated Successfully',
-    ]);
+                    $category->update();
+                         return response()->json([
+                             'status'=>200,
+                              'messages'=>'Category updated Successfully',
+                            ]);
 
                 }else{
                     return response()->json([
@@ -138,8 +125,6 @@ return response()->json([
                         'error'=>'No Category Id Found',
                     ]);
                 }
-   
-    
         }
             
 
